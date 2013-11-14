@@ -5,7 +5,7 @@ development:
   password: rails-dev
   database: app-dev
 
-test:
+test: &test
   adapter: postgresql
   host: localhost
   username: rails-test
@@ -15,3 +15,6 @@ test:
 production:
   adapter: postgresql
   host: localhost
+
+cucumber:
+  <<: *test
