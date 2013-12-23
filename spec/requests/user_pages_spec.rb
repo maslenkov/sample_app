@@ -8,7 +8,7 @@ describe "User Pages" do
 
     describe "check content" do
       it { should have_selector('h1', text: 'Sign up') }
-      it { should have_selector('title', text: full_title('Sign up')) }
+      it { should have_full_title_with 'Sign up' }
     end
 
     describe "signup" do
@@ -22,7 +22,7 @@ describe "User Pages" do
         describe "after submission" do
           before { click_button submit }
 
-          it { should have_selector('title', text: 'Sign up') }
+          it { should have_full_title_with 'Sign up' }
           it { should have_content('6 errors'); }
         end
       end
@@ -43,8 +43,8 @@ describe "User Pages" do
           before { click_button submit }
           let(:user) { User.find_by_email 'qw@qw.qw' }
 
-          it { should have_selector('title', text: user.name) }
-          it { should have_selector('div.alert.alert-success', text: 'Welcome') }
+          it { should have_full_title_with user.name }
+          it { should have_success_message 'Welcome' }
           it { should have_link('Sign out') }
 
           describe "followed by sign out" do
@@ -62,6 +62,6 @@ describe "User Pages" do
     before { visit user_path(user) }
 
     it { should have_selector('h1', text: user.name) }
-    it { should have_selector('title', text: user.name) }
+    it { should have_full_title_with user.name }
   end
 end
