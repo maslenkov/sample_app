@@ -9,6 +9,11 @@ describe "AuthenticationPages" do
     describe "check content" do
       it { should have_selector('h1', text: 'Sign in') }
       it { should have_selector('title', text: full_title('Sign in')) }
+
+      it { should have_no_link "Users" }
+      it { should have_no_link "Profile" }
+      it { should have_no_link "Settings" }
+      it { should have_no_link "Sign out" }
     end
 
     describe "with invalid information" do
@@ -69,6 +74,17 @@ describe "AuthenticationPages" do
           it "should render the desired protected page" do
             page.should have_selector 'title', text: 'Edit user'
           end
+
+          describe "when signing in again" do
+            before do
+              delete signout_path
+              sign_in user
+            end
+
+            it "should render the default (profile) page" do
+              page.should have_selector 'title', text: user.name
+            end
+          end
         end
       end
 
@@ -102,6 +118,30 @@ describe "AuthenticationPages" do
       describe "submitting a DELETE request to the Users#destroy action" do
         before { delete user_path user }
         specify { response.should redirect_to root_path }
+      end
+
+      specify "submitting a PUT request to the Users#update action to toggle admin attribute" do
+        expect do
+          put user_path(non_admin), user: {admin: 1}
+        end.to raise_error ActiveModel::MassAssignmentSecurity::Error, "Can't mass-assign protected attributes: admin"
+      end
+    end
+
+    describe "as an user" do
+      describe "in the Users controller" do
+        before { sign_in user }
+
+        describe "visiting the sign up page" do
+          before { visit signup_path }
+
+          it { should have_no_selector('h1', text: 'Sign up') }
+        end
+
+        describe "submitting to the create action" do
+          before { post users_path }
+
+          specify { response.should redirect_to user_path user }
+        end
       end
     end
   end
