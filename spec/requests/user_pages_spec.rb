@@ -117,7 +117,7 @@ describe "User Pages" do
 
         it "should list each user" do
           User.paginate(page: 1).each do |user|
-            page.should have_selector 'li', text: user.name
+            should have_selector 'li', text: user.name
           end
         end
       end
@@ -138,6 +138,12 @@ describe "User Pages" do
             expect { click_link 'delete' }.to change(User, :count).by(-1)
           end
           it { should have_no_link 'delete', href: user_path(admin) }
+
+          specify "delete them self" do
+            expect { delete user_path(admin) }.not_to change(User, :count)
+            response.should redirect_to users_path
+            flash[:error].should be_eql "You can not delete them self."
+          end
         end
       end
     end
