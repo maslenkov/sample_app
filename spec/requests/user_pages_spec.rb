@@ -149,10 +149,19 @@ describe "User Pages" do
     end
 
     describe "profile page" do
+      let!(:m1) { FactoryGirl.create :micropost, user: user, content: "Foo" }
+      let!(:m2) { FactoryGirl.create :micropost, user: user, content: "Bar" }
+
       before { visit user_path(user) }
 
       it { should have_selector('h1', text: user.name) }
       it { should have_selector('title', text: user.name) }
+
+      describe "microposts" do
+        it { should have_content 'Foo' }
+        it { should have_content 'Bar' }
+        it { should have_content 2 }
+      end
     end
   end
 end
