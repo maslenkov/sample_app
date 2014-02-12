@@ -32,6 +32,31 @@ describe "Static pages" do
           expect(page).to have_selector("li##{item.id}", text: item.content)
         end
       end
+
+      describe "microposts count" do
+        describe 'for single micropost' do
+          before do
+            user.microposts.last.destroy
+            visit root_path
+          end
+
+          it { page.should have_content '1 micropost' }
+          it { page.should have_no_content 'microposts' }
+        end
+
+        describe 'if there are no messages' do
+          before do
+            user.microposts.destroy_all
+            visit root_path
+          end
+
+          it { page.should have_content '0 microposts' }
+        end
+
+        describe 'for several microposts' do
+          it { page.should have_content '2 microposts' }
+        end
+      end
     end
   end
 
