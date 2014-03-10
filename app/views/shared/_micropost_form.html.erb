@@ -1,17 +1,16 @@
 <script type="text/javascript">
-  $(function () {
-    var $text_area = $('#js-text-area');
-    var $output_field = $('#js-symbols-counter');
-    function update_counter() {
-      var length = $text_area.val().length;
-      var output = length > 0 ? length + '/140' : '140';
-      $output_field.text(output);
+  window.onload = function () {
+    var text_area = document.getElementById('js-text-area');
+    var output_field = document.getElementById('js-symbols-counter');
+    function _eventHendler() {
+      var length = text_area.value.length;
+      output_field.innerHTML = length > 0 ? length + '/140' : '140';
     }
 
-    update_counter()
-    $text_area.keyup(update_counter);
-    $text_area.change(update_counter);
-  });
+    _eventHendler();
+    text_area.onchange = _eventHendler;
+    text_area.onkeyup = _eventHendler;
+  }
 </script>
 <%= form_for(@micropost) do |f| %>
   <%= render 'shared/error_messages', object: f.object %>
