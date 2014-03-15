@@ -1,7 +1,7 @@
 <script type="text/javascript">
   $(function () {
-    var $text_area = $('#js-text-area');
-    var $output_field = $('#js-symbols-counter');
+    var $text_area = $('.js-text-area');
+    var $output_field = $('.js-symbols-counter');
     function update_counter() {
       var length = $text_area.val().length;
       var output = length > 0 ? length + '/140' : '140';
@@ -16,10 +16,10 @@
 <%= form_for(@micropost) do |f| %>
   <%= render 'shared/error_messages', object: f.object %>
   <div class="field">
-    <%= f.text_area :content, placeholder: "Compose new micropost...", id: "js-text-area" %>
+    <%= f.text_area :content, placeholder: "Compose new micropost...", class: "js-text-area" %>
   </div>
   <div class="raw">
-    <div class="muted pull-right" id="js-symbols-counter">140</div>
+    <div class="muted pull-right js-symbols-counter">140</div>
     <%= f.submit "Post", class: "btn btn-large btn-primary" %>
   </div>
 <% end %>
